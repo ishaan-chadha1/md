@@ -4,7 +4,7 @@ import { Col, Image, Row } from 'react-bootstrap';
 import './CreateContract.css';
 
 
-const WizardForm = () => {
+const WizardForm = ({pdfUrl, currentPage}) => {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         firstName: "",
@@ -23,6 +23,12 @@ const WizardForm = () => {
 
     const handleNext = () => {
         setStep((prevStep) => prevStep + 1);
+        const canvas = document.getElementById(`canvas-1`)
+        if(canvas){
+            const image = canvas.toDataURL("image/png") // You can change the format to 'image/jpeg' if needed
+            pdfUrl = image
+            console.log("🚀 ~ handleNext ~ pdfUrl:", pdfUrl)
+        }
     };
 
     const handlePrev = () => {
@@ -259,7 +265,7 @@ const WizardForm = () => {
                                 <div className="docdetail">
                                     <h4>Activity 1 - Googles</h4>
                                     <div className="contactname text-center pb-4">
-                                        <Image src='Images/esign/notice.png' />
+                                        <img src={pdfUrl} key={pdfUrl}/>
                                     </div>
 
                                 </div>

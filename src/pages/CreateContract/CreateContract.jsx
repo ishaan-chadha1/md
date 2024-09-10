@@ -114,6 +114,7 @@ function dragElement(elmnt) {
 }
 
 const CreateContract = () => {
+  const [pdfUrl, setPdfUrl] = useState('')
   const [show, setShow] = useState(false)
   const [show2, setShow2] = useState(false)
   const [show3, setShow3] = useState(false)
@@ -180,6 +181,7 @@ const CreateContract = () => {
     var modal = document.getElementById("myModal")
     dragElement(document.getElementById("drag_sign"))
     modal.style.display = "block"
+    savePdfUrl()
   }
 
   const handleConfirmAddSign = () => {
@@ -193,12 +195,14 @@ const CreateContract = () => {
     document.getElementById("more").style.display = "block"
     document.getElementById("less").style.display = "block"
     document.getElementById("add").style.display = "block"
+    savePdfUrl()
     return img
   }
   const deleteSign = () => {
     document.getElementById("drag_sign").style.display = "none"
     document.getElementById("more").style.display = "none"
     document.getElementById("less").style.display = "none"
+    savePdfUrl()
   }
 
   const addSign = () => {
@@ -235,18 +239,22 @@ const CreateContract = () => {
       document.getElementById("more").style.display = "none"
       document.getElementById("less").style.display = "none"
       // document.getElementById("download").style.display = "block"
+      savePdfUrl()
     }
+    savePdfUrl()
   }
 
   const moreElement = (which) => {
     console.log("🚀 ~ moreElement ~ which:", which)
     var signatureElement = document.getElementById(which)
     increaseSize(signatureElement)
+    savePdfUrl()
   }
 
   const lessElement = (which) => {
     var signatureElement = document.getElementById(which)
     decreaseSize(signatureElement)
+    savePdfUrl()
   }
 
   const handleAddDate = () => {
@@ -268,12 +276,14 @@ const CreateContract = () => {
     document.getElementById("addForDate").style.display = "block"
 
     // document.getElementById("download").style.display = "block"
+    savePdfUrl()
   }
 
   const deleteDate = () => {
     document.getElementById("drag_date").style.display = "none"
     document.getElementById("moreForDate").style.display = "none"
     document.getElementById("lessForDate").style.display = "none"
+    savePdfUrl()
   }
 
   const addDate = () => {
@@ -313,6 +323,7 @@ const CreateContract = () => {
 
     // Optionally, you may want to make the date draggable after adding it to the canvas
     dragElement(document.getElementById("drag_date"))
+    savePdfUrl()
   }
 
   const handleAddText = () => {
@@ -323,6 +334,7 @@ const CreateContract = () => {
     document.getElementById("moreForText").style.display = "block"
     document.getElementById("lessForText").style.display = "block"
     // document.getElementById("download").style.display = "block"
+    savePdfUrl()
   }
 
   const deleteText = () => {
@@ -332,6 +344,7 @@ const CreateContract = () => {
     document.getElementById("moreForText").style.display = "none"
     document.getElementById("lessForText").style.display = "none"
     document.getElementById("download").style.display = "block"
+    savePdfUrl()
   }
 
   const addText = () => {
@@ -364,11 +377,11 @@ const CreateContract = () => {
     document.getElementById("addForText").style.display = "none"
     document.getElementById("moreForText").style.display = "none"
     document.getElementById("lessForText").style.display = "none"
+    savePdfUrl()
   }
 
   const downloadPDF = () => {
-    const canvas = document.getElementById(`canvas-${currentPage}`)
-    const image = canvas.toDataURL("image/png") // You can change the format to 'image/jpeg' if needed
+    const image = savePdfUrl()
 
     const link = document.createElement("a")
     link.href = image
@@ -376,6 +389,13 @@ const CreateContract = () => {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+  }
+
+  const savePdfUrl = () =>{
+    const canvas = document.getElementById(`canvas-${currentPage}`)
+    const image = canvas.toDataURL("image/png") // You can change the format to 'image/jpeg' if needed
+    setPdfUrl(image);
+    return image
   }
 
   useEffect(() => {
@@ -673,7 +693,7 @@ const CreateContract = () => {
 
             <Tab eventKey="review" title="Review and Send">
               <div className=" mt-3 mb-4">
-                <WizardForm />
+                <WizardForm pdfUrl={pdfUrl} currentPage={currentPage}/>
               </div>
             </Tab>
           </Tabs>
